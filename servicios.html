@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KJCODE - Servicios</title>
     <style>
-      /* ---------- RESET ---------- */
       * {
         margin: 0;
         padding: 0;
@@ -17,8 +16,6 @@
         color: #eaeaea;
         line-height: 1.6;
       }
-
-      /* ---------- HEADER ---------- */
       header {
         display: flex;
         justify-content: space-between;
@@ -51,8 +48,6 @@
         background: #6c63ff;
         color: #fff;
       }
-
-      /* ---------- MENÚ HAMBURGUESA ---------- */
       #menuHamburguesa {
         display: none;
         font-size: 30px;
@@ -76,12 +71,13 @@
       #sidebar.active {
         right: 0;
       }
-      #sidebar #close-btn {
+      #close-btn {
         font-size: 28px;
         color: #fff;
         cursor: pointer;
         align-self: flex-end;
         margin-bottom: 30px;
+        display: none;
       }
       #sidebar ul {
         list-style: none;
@@ -100,8 +96,6 @@
       #sidebar ul li a.activo {
         color: #6c63ff;
       }
-
-      /* ---------- MAIN SECCIONES ---------- */
       main {
         padding: 60px 40px;
         max-width: 1200px;
@@ -131,7 +125,6 @@
         margin-bottom: 15px;
         line-height: 1.7;
       }
-
       .lista-servicios {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -156,8 +149,6 @@
         font-size: 1rem;
         color: #ccc;
       }
-
-      /* ---------- FOOTER ---------- */
       footer {
         background: black;
         color: #ddd;
@@ -227,27 +218,6 @@
       .pieDePagina-abajo ul li a:hover {
         color: #6c63ff;
       }
-
-      /* ---------- RESPONSIVE ---------- */
-      @media (max-width: 1024px) {
-        section h2 {
-          font-size: 1.8rem;
-        }
-        section p {
-          font-size: 18px;
-        }
-      }
-      @media (max-width: 768px) {
-        main {
-          padding: 30px 20px;
-        }
-        section {
-          padding: 25px;
-        }
-        section h2 {
-          font-size: 1.6rem;
-        }
-      }
       @media (max-width: 677px) {
         #menuHamburguesa {
           display: block;
@@ -298,62 +268,43 @@
           para tu empresa o proyecto, siempre con tecnología confiable y a la
           medida.
         </p>
-
         <div class="lista-servicios">
-          <div
-            class="servicio"
-            data-info="Diseño y programación de páginas web modernas, seguras y adaptadas a cualquier dispositivo."
-          >
+          <div class="servicio">
             <h3>Desarrollo Web</h3>
             <p>
               Diseño y programación de páginas web modernas, seguras y adaptadas
               a cualquier dispositivo.
             </p>
           </div>
-          <div
-            class="servicio"
-            data-info="Creación de aplicaciones personalizadas que ayudan a mejorar procesos y conectar con tus clientes."
-          >
+          <div class="servicio">
             <h3>Aplicaciones</h3>
             <p>
               Creación de aplicaciones personalizadas que ayudan a mejorar
               procesos y conectar con tus clientes.
             </p>
           </div>
-          <div
-            class="servicio"
-            data-info="Actualizamos y cuidamos tu página para que siempre esté en línea, rápida y al día."
-          >
+          <div class="servicio">
             <h3>Mantenimiento de Páginas</h3>
             <p>
               Actualizamos y cuidamos tu página para que siempre esté en línea,
               rápida y al día.
             </p>
           </div>
-          <div
-            class="servicio"
-            data-info="Renovamos páginas existentes con mejor diseño, velocidad y nuevas funciones que marcan la diferencia."
-          >
+          <div class="servicio">
             <h3>Mejoramiento de Páginas</h3>
             <p>
               Renovamos páginas existentes con mejor diseño, velocidad y nuevas
               funciones que marcan la diferencia.
             </p>
           </div>
-          <div
-            class="servicio"
-            data-info="Desde inventarios hasta agendamiento de citas, desarrollamos sistemas a la medida de tu empresa."
-          >
+          <div class="servicio">
             <h3>Sistemas Específicos</h3>
             <p>
               Desde inventarios hasta agendamiento de citas, desarrollamos
               sistemas a la medida de tu empresa.
             </p>
           </div>
-          <div
-            class="servicio"
-            data-info="Creación de diseños atractivos y fáciles de usar, para brindar la mejor experiencia digital."
-          >
+          <div class="servicio">
             <h3>Diseño de Interfaces Modernas</h3>
             <p>
               Creación de diseños atractivos y fáciles de usar, para brindar la
@@ -409,57 +360,11 @@
         </ul>
       </div>
     </footer>
+
     <script>
-      // ---------- MODAL SERVICIOS ----------
-      const servicios = document.querySelectorAll(".servicio");
-      const modal = document.getElementById("modal");
-      const modalText = document.getElementById("modal-text");
-
-      servicios.forEach((serv) => {
-        serv.addEventListener("click", () => {
-          modalText.textContent = serv.getAttribute("data-info");
-          modal.classList.add("active");
-        });
-
-        // ---------- EFECTO 3D ----------
-        serv.addEventListener("mousemove", (e) => {
-          const rect = serv.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const rotateY = (x / rect.width - 0.5) * 10;
-          const rotateX = (y / rect.height - 0.5) * -10;
-          serv.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-          serv.style.boxShadow = "0 10px 20px rgba(0,0,0,0.3)";
-        });
-        serv.addEventListener("mouseleave", () => {
-          serv.style.transform = "rotateX(0) rotateY(0) scale(1)";
-          serv.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
-        });
-      });
-
-      function cerrarModal() {
-        modal.classList.remove("active");
-      }
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") cerrarModal();
-      });
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) cerrarModal();
-      });
-
-      // ---------- MENÚ HAMBURGUESA ----------
       const menuHamburguesa = document.getElementById("menuHamburguesa");
       const sidebar = document.getElementById("sidebar");
       const closeBtn = document.getElementById("close-btn");
-
-      function actualizarMenu() {
-        if (window.innerWidth > 677) {
-          sidebar.classList.remove("active");
-          menuHamburguesa.style.display = "block"; // mostrar las 3 rayas
-          closeBtn.style.display = "none";
-          document.body.style.overflow = "";
-        }
-      }
 
       menuHamburguesa.onclick = () => {
         sidebar.classList.add("active");
@@ -470,24 +375,29 @@
 
       closeBtn.onclick = () => {
         sidebar.classList.remove("active");
-        menuHamburguesa.style.display = "block";
         closeBtn.style.display = "none";
+        menuHamburguesa.style.display = "block";
         document.body.style.overflow = "";
       };
 
       sidebar.querySelectorAll("ul li a").forEach((link) =>
         link.addEventListener("click", () => {
           sidebar.classList.remove("active");
-          menuHamburguesa.style.display = "block";
           closeBtn.style.display = "none";
+          menuHamburguesa.style.display = "block";
           document.body.style.overflow = "";
         })
       );
 
-      window.addEventListener("resize", actualizarMenu);
-      actualizarMenu();
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 677) {
+          sidebar.classList.remove("active");
+          closeBtn.style.display = "none";
+          menuHamburguesa.style.display = "block";
+          document.body.style.overflow = "";
+        }
+      });
 
-      // ---------- YEAR FOOTER ----------
       document.getElementById("year").textContent = new Date().getFullYear();
     </script>
   </body>
