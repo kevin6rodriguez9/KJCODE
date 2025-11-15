@@ -103,13 +103,18 @@ nav {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 28px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   letter-spacing: 2px;
+}
+
+.logo img {
+  max-height: 150px; /* ajusta según el tamaño que quieras */
+  width: auto;
+  display: block;
 }
 
 .enlacesNavegacion {
@@ -264,7 +269,7 @@ nav {
   );
 }
 
-.tituloSeccion{
+.tituloSeccion {
   text-align: center;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
