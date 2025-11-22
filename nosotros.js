@@ -1,148 +1,288 @@
 // ============================================
-// KJCODE - Nosotros Page JavaScript
+// KJCODE - Nosotros Page JavaScript Mejorado
 // ============================================
 
 // ============================================
-// 1. MENÚ RESPONSIVE
+// 1. MENÚ RESPONSIVE MEJORADO
 // ============================================
 
-function toggleMenu() {
-  const botonMenu = document.getElementById("botonMenu");
-  const enlacesNavegacion = document.getElementById("enlacesNavegacion");
+const botonMenu = document.getElementById("botonMenu");
+const enlacesNavegacion = document.getElementById("enlacesNavegacion");
+const cabecera = document.getElementById("cabecera");
 
-  // Abrir/cerrar menú
-  botonMenu.addEventListener("click", () => {
+// Abrir/cerrar menú al hacer click en el botón
+if (botonMenu && enlacesNavegacion) {
+  botonMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
     enlacesNavegacion.classList.toggle("activo");
+    botonMenu.classList.toggle("activo");
+
+    // Prevenir scroll cuando el menú está abierto
+    if (enlacesNavegacion.classList.contains("activo")) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
   });
 
-  // Cerrar menú al hacer click en enlaces
+  // Cerrar menú al hacer click en un enlace
   enlacesNavegacion.querySelectorAll("a").forEach((enlace) => {
     enlace.addEventListener("click", () => {
       enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
     });
   });
 
-  // Cerrar menú al hacer click fuera
+  // Cerrar menú al hacer click fuera de él
   document.addEventListener("click", (e) => {
     if (
       !botonMenu.contains(e.target) &&
-      !enlacesNavegacion.contains(e.target)
+      !enlacesNavegacion.contains(e.target) &&
+      enlacesNavegacion.classList.contains("activo")
     ) {
       enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
+    }
+  });
+
+  // Cerrar menú con tecla ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && enlacesNavegacion.classList.contains("activo")) {
+      enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
     }
   });
 }
 
 // ============================================
-// 2. ANIMACIONES DE SCROLL CON INTERSECTION OBSERVER
+// 2. EFECTO DE SCROLL EN EL HEADER
 // ============================================
 
-function activarAnimacionesScroll() {
-  // Seleccionar todos los elementos a animar
-  const elementosAnimar = document.querySelectorAll(
-    ".contenidoNosotros, .cartaMVV, .valor, .equipoMiembro"
-  );
+let scrollAnterior = window.pageYOffset;
+let ticking = false;
 
-  // Configurar estilos iniciales
-  elementosAnimar.forEach((elemento) => {
-    elemento.style.opacity = "0";
-    elemento.style.transform = "translateY(40px)";
-    elemento.style.transition = "all 0.8s ease";
+function actualizarHeader() {
+  const scrollActual = window.pageYOffset;
+
+  // Agregar clase 'scrolled' cuando se hace scroll
+  if (scrollActual > 50) {
+    cabecera.classList.add("scrolled");
+  } else {
+    cabecera.classList.remove("scrolled");
+  }
+
+  scrollAnterior = scrollActual;
+  ticking = false;
+}
+
+window.addEventListener("scroll", () => {
+  if (!ticking) {
+    window.requestAnimationFrame(actualizarHeader);
+    ticking = true;
+  }
+});
+
+// ============================================
+// 3. INTERSECTION OBSERVER PARA ANIMACIONES
+// ============================================
+
+// Configuración del Intersection Observer
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: "0px 0px -80px 0px",
+};
+
+// Callback del observer
+const observerCallback = (entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      // Obtener el delay del elemento
+      const delay = entry.target.dataset.delay || 0;
+
+      setTimeout(() => {
+        entry.target.classList.add("visible");
+      }, delay);
+
+      // Dejar de observar después de animar
+      observer.unobserve(entry.target);
+    }
+  });
+};
+
+// Crear el observer
+const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+// Función para inicializar animaciones
+function inicializarAnimaciones() {
+  // Seleccionar todos los elementos con atributo data-aos
+  const elementosAOS = document.querySelectorAll("[data-aos]");
+
+  elementosAOS.forEach((elemento) => {
+    observer.observe(elemento);
   });
 
-  // Configurar IntersectionObserver
-  const opciones = {
-    threshold: 0.15, // Se activa cuando el 15% del elemento es visible
-    rootMargin: "0px 0px -50px 0px", // Margen para activar antes
-  };
+  // Seleccionar elementos específicos
+  const elementosAnimables = document.querySelectorAll(
+    ".mvCard, .valorCard, .equipoCard"
+  );
 
-  const observer = new IntersectionObserver((entradas) => {
-    entradas.forEach((entrada, index) => {
-      if (entrada.isIntersecting) {
-        // Añadir delay escalonado para efecto de cascada
-        setTimeout(() => {
-          entrada.target.style.opacity = "1";
-          entrada.target.style.transform = "translateY(0)";
-        }, index * 100); // 100ms de diferencia entre elementos
-
-        // Dejar de observar una vez animado
-        observer.unobserve(entrada.target);
-      }
-    });
-  }, opciones);
-
-  // Observar cada elemento
-  elementosAnimar.forEach((elemento) => {
+  elementosAnimables.forEach((elemento) => {
     observer.observe(elemento);
   });
 }
 
 // ============================================
-// 3. EFECTOS HOVER MEJORADOS CON JS
+// 4. ANIMACIÓN DE NÚMEROS (STATS)
 // ============================================
 
-function mejorarEfectosHover() {
-  // Seleccionar tarjetas
-  const tarjetas = document.querySelectorAll(".cartaMVV, .equipoMiembro");
+function animarNumeros() {
+  const stats = document.querySelectorAll(".statNumero");
 
-  tarjetas.forEach((tarjeta) => {
-    // Evento al entrar el mouse
-    tarjeta.addEventListener("mouseenter", function () {
-      this.style.transition =
-        "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-      this.style.transform = "translateY(-12px) scale(1.02)";
+  const observerStats = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const target = entry.target;
+          const text = target.textContent;
+          const numero = parseInt(text);
+
+          if (!isNaN(numero)) {
+            animarContador(target, 0, numero, 2000);
+          }
+
+          observerStats.unobserve(target);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  stats.forEach((stat) => {
+    observerStats.observe(stat);
+  });
+}
+
+function animarContador(elemento, inicio, fin, duracion) {
+  const rango = fin - inicio;
+  const incremento = rango / (duracion / 16);
+  let actual = inicio;
+
+  const timer = setInterval(() => {
+    actual += incremento;
+
+    if (actual >= fin) {
+      elemento.textContent =
+        fin +
+        (elemento.textContent.includes("+") ? "+" : "") +
+        (elemento.textContent.includes("%") ? "%" : "");
+      clearInterval(timer);
+    } else {
+      elemento.textContent =
+        Math.floor(actual) +
+        (elemento.textContent.includes("+") ? "+" : "") +
+        (elemento.textContent.includes("%") ? "%" : "");
+    }
+  }, 16);
+}
+
+// ============================================
+// 5. EFECTO PARALLAX EN CARDS
+// ============================================
+
+function agregarEfectoParallax() {
+  const cards = document.querySelectorAll(".mvCard, .equipoCard");
+
+  // Solo agregar efecto en dispositivos con mouse (no móviles)
+  if (window.matchMedia("(hover: hover)").matches) {
+    cards.forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
     });
+  }
+}
 
-    // Evento al salir el mouse
-    tarjeta.addEventListener("mouseleave", function () {
-      this.style.transform = "translateY(0) scale(1)";
-    });
+// ============================================
+// 6. SCROLL SUAVE PARA INDICADOR
+// ============================================
 
-    // Efecto de inclinación suave al mover el mouse
-    tarjeta.addEventListener("mousemove", function (e) {
-      const rect = this.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+const scrollIndicador = document.querySelector(".scrollIndicador");
 
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = (y - centerY) / 20;
-      const rotateY = (centerX - x) / 20;
-
-      this.style.transform = `translateY(-12px) scale(1.02) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    // Resetear al salir
-    tarjeta.addEventListener("mouseleave", function () {
-      this.style.transform = "translateY(0) scale(1) rotateX(0) rotateY(0)";
-    });
+if (scrollIndicador) {
+  // Ocultar al hacer scroll
+  window.addEventListener("scroll", () => {
+    if (window.pageYOffset > 300) {
+      scrollIndicador.style.opacity = "0";
+      scrollIndicador.style.pointerEvents = "none";
+    } else {
+      scrollIndicador.style.opacity = "1";
+      scrollIndicador.style.pointerEvents = "auto";
+    }
   });
 
-  // Efecto para los valores
-  const valores = document.querySelectorAll(".valor");
-
-  valores.forEach((valor) => {
-    valor.addEventListener("mouseenter", function () {
-      this.style.transition = "all 0.3s ease";
-      this.style.transform = "translateX(15px) scale(1.03)";
-    });
-
-    valor.addEventListener("mouseleave", function () {
-      this.style.transform = "translateX(0) scale(1)";
-    });
+  // Click para hacer scroll a la primera sección
+  scrollIndicador.addEventListener("click", () => {
+    const primeraSeccion = document.querySelector(".seccionHistoria");
+    if (primeraSeccion) {
+      primeraSeccion.scrollIntoView({ behavior: "smooth" });
+    }
   });
 }
 
 // ============================================
-// 4. BOTÓN FLOTANTE PARA VOLVER ARRIBA
+// 7. SCROLL SUAVE PARA ENLACES INTERNOS
 // ============================================
 
-function crearBotonScroll() {
+document.querySelectorAll('a[href^="#"]').forEach((enlace) => {
+  enlace.addEventListener("click", function (e) {
+    const href = this.getAttribute("href");
+
+    if (href === "#") {
+      e.preventDefault();
+      return;
+    }
+
+    const destino = document.querySelector(href);
+
+    if (destino) {
+      e.preventDefault();
+      const offsetTop = destino.offsetTop - 100;
+
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "smooth",
+      });
+    }
+  });
+});
+
+// ============================================
+// 8. BOTÓN "VOLVER ARRIBA"
+// ============================================
+
+function crearBotonScrollTop() {
   // Crear el botón
   const boton = document.createElement("button");
   boton.innerHTML = "↑";
   boton.className = "botonScrollTop";
+  boton.setAttribute("aria-label", "Volver arriba");
 
   // Estilos del botón
   Object.assign(boton.style, {
@@ -152,9 +292,9 @@ function crearBotonScroll() {
     width: "55px",
     height: "55px",
     borderRadius: "50%",
-    border: "2px solid var(--primary)",
-    background: "linear-gradient(135deg, var(--primary), var(--primary-dark))",
-    color: "var(--text)",
+    border: "2px solid #7a00ff",
+    background: "linear-gradient(135deg, #7a00ff, #5500b8)",
+    color: "#ffffff",
     fontSize: "24px",
     fontWeight: "bold",
     cursor: "pointer",
@@ -168,12 +308,11 @@ function crearBotonScroll() {
     justifyContent: "center",
   });
 
-  // Agregar al body
   document.body.appendChild(boton);
 
   // Mostrar/ocultar según scroll
   window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 400) {
+    if (window.pageYOffset > 500) {
       boton.style.opacity = "1";
       boton.style.visibility = "visible";
       boton.style.transform = "scale(1)";
@@ -195,14 +334,13 @@ function crearBotonScroll() {
     boton.style.boxShadow = "0 8px 25px rgba(122, 0, 255, 0.4)";
   });
 
-  // Acción de click: scroll suave al inicio
+  // Acción de click
   boton.addEventListener("click", () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
 
-    // Efecto de click
     boton.style.transform = "scale(0.95)";
     setTimeout(() => {
       boton.style.transform = "scale(1)";
@@ -211,87 +349,70 @@ function crearBotonScroll() {
 }
 
 // ============================================
-// 5. ANIMACIÓN DEL HEADER AL HACER SCROLL
+// 9. PERFORMANCE: REDUCIR ANIMACIONES SI ES NECESARIO
 // ============================================
 
-function animarHeader() {
-  const header = document.querySelector("header");
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
 
-  window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 50) {
-      header.style.background = "rgba(0, 0, 0, 0.95)";
-      header.style.boxShadow = "0 5px 20px rgba(122, 0, 255, 0.3)";
-    } else {
-      header.style.background = "rgba(0, 0, 0, 0.8)";
-      header.style.boxShadow = "none";
+if (prefersReducedMotion.matches) {
+  document.body.classList.add("reduced-motion");
+  // Desactivar animaciones complejas
+}
+
+// ============================================
+// 10. OPTIMIZACIÓN: THROTTLE PARA RESIZE
+// ============================================
+
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    // Cerrar menú en pantallas grandes
+    if (window.innerWidth > 768) {
+      enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
     }
-  });
-}
+  }, 250);
+});
 
 // ============================================
-// 6. ANIMACIÓN INICIAL DE LA PÁGINA
+// 11. INICIALIZACIÓN AL CARGAR LA PÁGINA
 // ============================================
 
-function animarCargaPagina() {
-  // Animar el encabezado principal
-  const encabezado = document.querySelector(".encabezadoPagina");
+window.addEventListener("load", () => {
+  // Inicializar todas las funciones
+  inicializarAnimaciones();
+  animarNumeros();
 
-  if (encabezado) {
-    encabezado.style.opacity = "0";
-    encabezado.style.transform = "translateY(30px)";
+  // Esperar un poco antes de agregar efectos parallax
+  setTimeout(() => {
+    agregarEfectoParallax();
+  }, 500);
 
-    setTimeout(() => {
-      encabezado.style.transition = "all 1s ease";
-      encabezado.style.opacity = "1";
-      encabezado.style.transform = "translateY(0)";
-    }, 200);
+  // Crear botón de scroll top
+  crearBotonScrollTop();
+
+  // Animar hero content
+  const heroContenido = document.querySelector(".heroContenido");
+  if (heroContenido) {
+    heroContenido.style.opacity = "1";
+    heroContenido.style.transform = "translateY(0)";
   }
-}
+
+  console.log("✅ KJCODE - Página Nosotros cargada correctamente");
+});
 
 // ============================================
-// 7. EFECTO EN BOTONES DE CONTACTO
+// 12. PREVENIR FLASH DE CONTENIDO NO ESTILIZADO
 // ============================================
 
-function animarBotonesContacto() {
-  const botones = document.querySelectorAll(".botonContacto");
-
-  botones.forEach((boton) => {
-    boton.addEventListener("mouseenter", function () {
-      this.style.transform = "translateY(-4px) scale(1.05)";
-    });
-
-    boton.addEventListener("mouseleave", function () {
-      this.style.transform = "translateY(0) scale(1)";
-    });
-
-    boton.addEventListener("mousedown", function () {
-      this.style.transform = "translateY(0) scale(0.97)";
-    });
-
-    boton.addEventListener("mouseup", function () {
-      this.style.transform = "translateY(-4px) scale(1.05)";
-    });
-  });
-}
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("loaded");
+});
 
 // ============================================
-// 8. INICIALIZACIÓN
+// FIN DEL SCRIPT
 // ============================================
-
-function init() {
-  // Esperar a que el DOM esté completamente cargado
-  document.addEventListener("DOMContentLoaded", () => {
-    toggleMenu();
-    activarAnimacionesScroll();
-    mejorarEfectosHover();
-    crearBotonScroll();
-    animarHeader();
-    animarCargaPagina();
-    animarBotonesContacto();
-
-    console.log('✅ KJCODE - Página "Nosotros" cargada correctamente');
-  });
-}
-
-// Inicializar todo
-init();

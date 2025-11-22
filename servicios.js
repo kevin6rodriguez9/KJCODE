@@ -1,253 +1,214 @@
 // ============================================
 // KJCODE - Servicios Page JavaScript
+// Estilo igual a Nosotros
 // ============================================
 
 // ============================================
-// 1. MENÚ RESPONSIVE
+// 1. MENÚ RESPONSIVE MEJORADO
 // ============================================
 
-function configurarMenuResponsive() {
-  const botonMenu = document.getElementById("botonMenu");
-  const enlacesNavegacion = document.getElementById("enlacesNavegacion");
+const botonMenu = document.getElementById("botonMenu");
+const enlacesNavegacion = document.getElementById("enlacesNavegacion");
+const cabecera = document.getElementById("cabecera");
 
-  // Abrir/cerrar menú al hacer click en el botón
-  botonMenu.addEventListener("click", () => {
+if (botonMenu && enlacesNavegacion) {
+  botonMenu.addEventListener("click", (e) => {
+    e.stopPropagation();
     enlacesNavegacion.classList.toggle("activo");
+    botonMenu.classList.toggle("activo");
+
+    if (enlacesNavegacion.classList.contains("activo")) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
   });
 
-  // Cerrar menú al hacer click en cualquier enlace
-  const enlaces = enlacesNavegacion.querySelectorAll("a");
-  enlaces.forEach((enlace) => {
+  enlacesNavegacion.querySelectorAll("a").forEach((enlace) => {
     enlace.addEventListener("click", () => {
       enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
     });
   });
 
-  // Cerrar menú al hacer click fuera de él
   document.addEventListener("click", (e) => {
     if (
       !botonMenu.contains(e.target) &&
-      !enlacesNavegacion.contains(e.target)
+      !enlacesNavegacion.contains(e.target) &&
+      enlacesNavegacion.classList.contains("activo")
     ) {
       enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && enlacesNavegacion.classList.contains("activo")) {
+      enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
     }
   });
 }
 
 // ============================================
-// 2. EFECTOS EN CARTAS DE SERVICIO
+// 2. EFECTO DE SCROLL EN EL HEADER
 // ============================================
 
-function configurarEfectosCartas() {
-  const cartas = document.querySelectorAll(".servicioCarta");
+let ticking = false;
 
-  cartas.forEach((carta) => {
-    // Efecto hover en desktop
-    carta.addEventListener("mouseenter", function () {
-      this.style.transition =
-        "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-      this.style.transform = "translateY(-12px) scale(1.03)";
-    });
+function actualizarHeader() {
+  const scrollActual = window.pageYOffset;
 
-    carta.addEventListener("mouseleave", function () {
-      this.style.transform = "translateY(0) scale(1)";
-    });
+  if (scrollActual > 50) {
+    cabecera.classList.add("scrolled");
+  } else {
+    cabecera.classList.remove("scrolled");
+  }
 
-    // Efecto al hacer click/touch en móviles
-    carta.addEventListener("click", function () {
-      // Verificar si es un dispositivo táctil
-      if ("ontouchstart" in window) {
-        // Añadir efecto destacado
-        this.style.transform = "translateY(-12px) scale(1.03)";
-        this.style.borderColor = "var(--primary)";
-        this.style.boxShadow = "0 25px 50px rgba(122, 0, 255, 0.4)";
+  ticking = false;
+}
 
-        // Remover efecto después de medio segundo
-        setTimeout(() => {
-          this.style.transform = "translateY(0) scale(1)";
-          this.style.borderColor = "rgba(122, 0, 255, 0.2)";
-          this.style.boxShadow = "none";
-        }, 500);
-      }
-    });
+window.addEventListener("scroll", () => {
+  if (!ticking) {
+    window.requestAnimationFrame(actualizarHeader);
+    ticking = true;
+  }
+});
 
-    // Efecto de brillo suave al mover el mouse sobre la carta
-    carta.addEventListener("mousemove", function (e) {
-      if (!("ontouchstart" in window)) {
-        const rect = this.getBoundingClientRect();
+// ============================================
+// 3. INTERSECTION OBSERVER PARA ANIMACIONES
+// ============================================
+
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: "0px 0px -80px 0px",
+};
+
+const observerCallback = (entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.delay || 0;
+
+      setTimeout(() => {
+        entry.target.classList.add("visible");
+      }, delay);
+
+      observer.unobserve(entry.target);
+    }
+  });
+};
+
+const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+function inicializarAnimaciones() {
+  const elementosAOS = document.querySelectorAll("[data-aos]");
+  elementosAOS.forEach((elemento) => {
+    observer.observe(elemento);
+  });
+
+  const elementosAnimables = document.querySelectorAll(
+    ".servicioCard, .servicioAdicionalCard, .pasoCard"
+  );
+  elementosAnimables.forEach((elemento) => {
+    observer.observe(elemento);
+  });
+}
+
+// ============================================
+// 4. EFECTO PARALLAX EN CARDS
+// ============================================
+
+function agregarEfectoParallax() {
+  const cards = document.querySelectorAll(".servicioCard, .pasoCard");
+
+  if (window.matchMedia("(hover: hover)").matches) {
+    cards.forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const rotateX = (y - centerY) / 30;
-        const rotateY = (centerX - x) / 30;
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
 
-        this.style.transform = `translateY(-12px) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      }
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
     });
-
-    carta.addEventListener("mouseleave", function () {
-      this.style.transform = "translateY(0) scale(1) rotateX(0) rotateY(0)";
-    });
-  });
-}
-
-// ============================================
-// 3. ANIMACIÓN DE SCROLL (FADE-IN)
-// ============================================
-
-function configurarAnimacionScroll() {
-  const cartas = document.querySelectorAll(".servicioCarta");
-
-  // Configurar estilos iniciales para las cartas
-  cartas.forEach((carta) => {
-    carta.style.opacity = "0";
-    carta.style.transform = "translateY(40px)";
-    carta.style.transition = "all 0.7s ease";
-  });
-
-  // Configurar IntersectionObserver
-  const opciones = {
-    threshold: 0.2, // Se activa cuando el 20% de la carta es visible
-    rootMargin: "0px 0px -50px 0px",
-  };
-
-  const observer = new IntersectionObserver((entradas) => {
-    entradas.forEach((entrada, index) => {
-      if (entrada.isIntersecting) {
-        // Añadir delay escalonado para crear efecto de cascada
-        setTimeout(() => {
-          entrada.target.style.opacity = "1";
-          entrada.target.style.transform = "translateY(0)";
-        }, index * 150); // 150ms de diferencia entre cada carta
-
-        // Dejar de observar después de animar
-        observer.unobserve(entrada.target);
-      }
-    });
-  }, opciones);
-
-  // Observar todas las cartas
-  cartas.forEach((carta) => {
-    observer.observe(carta);
-  });
-}
-
-// ============================================
-// 4. EFECTO DE PULSO EN BOTÓN "COMENZAR PROYECTO"
-// ============================================
-
-function configurarPulsoBoton() {
-  const boton = document.querySelector(".botonPrimario");
-
-  if (!boton) return;
-
-  // Crear e inyectar los estilos CSS para la animación de pulso
-  const style = document.createElement("style");
-  style.textContent = `
-    @keyframes pulso {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 10px 30px rgba(122, 0, 255, 0.4);
-      }
-      50% {
-        transform: scale(1.05);
-        box-shadow: 0 15px 40px rgba(122, 0, 255, 0.7);
-      }
-      100% {
-        transform: scale(1);
-        box-shadow: 0 10px 30px rgba(122, 0, 255, 0.4);
-      }
-    }
-    
-    .pulso-activo {
-      animation: pulso 0.8s ease-in-out;
-    }
-  `;
-  document.head.appendChild(style);
-
-  // Función para activar el pulso
-  function activarPulso() {
-    boton.classList.add("pulso-activo");
-
-    // Remover la clase después de la animación
-    setTimeout(() => {
-      boton.classList.remove("pulso-activo");
-    }, 800);
   }
-
-  // Activar pulso cada 5 segundos
-  setInterval(activarPulso, 5000);
-
-  // Efecto hover mejorado
-  boton.addEventListener("mouseenter", function () {
-    this.style.transform = "translateY(-5px) scale(1.05)";
-  });
-
-  boton.addEventListener("mouseleave", function () {
-    this.style.transform = "translateY(0) scale(1)";
-  });
-
-  // Efecto al hacer click
-  boton.addEventListener("mousedown", function () {
-    this.style.transform = "translateY(0) scale(0.98)";
-  });
-
-  boton.addEventListener("mouseup", function () {
-    this.style.transform = "translateY(-5px) scale(1.05)";
-  });
 }
 
 // ============================================
-// 5. ANIMACIÓN DEL HEADER AL HACER SCROLL
+// 5. SCROLL SUAVE PARA INDICADOR
 // ============================================
 
-function configurarAnimacionHeader() {
-  const header = document.querySelector("header");
+const scrollIndicador = document.querySelector(".scrollIndicador");
 
+if (scrollIndicador) {
   window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 50) {
-      header.style.background = "rgba(0, 0, 0, 0.95)";
-      header.style.boxShadow = "0 5px 20px rgba(122, 0, 255, 0.3)";
+    if (window.pageYOffset > 300) {
+      scrollIndicador.style.opacity = "0";
+      scrollIndicador.style.pointerEvents = "none";
     } else {
-      header.style.background = "rgba(0, 0, 0, 0.8)";
-      header.style.boxShadow = "none";
+      scrollIndicador.style.opacity = "1";
+      scrollIndicador.style.pointerEvents = "auto";
+    }
+  });
+
+  scrollIndicador.addEventListener("click", () => {
+    const primeraSeccion = document.querySelector(".seccionServicios");
+    if (primeraSeccion) {
+      primeraSeccion.scrollIntoView({ behavior: "smooth" });
     }
   });
 }
 
 // ============================================
-// 6. ANIMACIÓN DE CARGA DE LA PÁGINA
+// 6. SCROLL SUAVE PARA ENLACES INTERNOS
 // ============================================
 
-function configurarAnimacionCarga() {
-  const encabezado = document.querySelector(".encabezadoPagina");
+document.querySelectorAll('a[href^="#"]').forEach((enlace) => {
+  enlace.addEventListener("click", function (e) {
+    const href = this.getAttribute("href");
 
-  if (encabezado) {
-    encabezado.style.opacity = "0";
-    encabezado.style.transform = "translateY(30px)";
+    if (href === "#") {
+      e.preventDefault();
+      return;
+    }
 
-    setTimeout(() => {
-      encabezado.style.transition = "all 1s ease";
-      encabezado.style.opacity = "1";
-      encabezado.style.transform = "translateY(0)";
-    }, 200);
-  }
-}
+    const destino = document.querySelector(href);
+
+    if (destino) {
+      e.preventDefault();
+      const offsetTop = destino.offsetTop - 100;
+
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "smooth",
+      });
+    }
+  });
+});
 
 // ============================================
-// 7. BOTÓN FLOTANTE PARA VOLVER ARRIBA
+// 7. BOTÓN "VOLVER ARRIBA"
 // ============================================
 
-function crearBotonVolverArriba() {
-  // Crear el botón
+function crearBotonScrollTop() {
   const boton = document.createElement("button");
   boton.innerHTML = "↑";
+  boton.className = "botonScrollTop";
   boton.setAttribute("aria-label", "Volver arriba");
 
-  // Estilos del botón
   Object.assign(boton.style, {
     position: "fixed",
     bottom: "30px",
@@ -255,9 +216,9 @@ function crearBotonVolverArriba() {
     width: "55px",
     height: "55px",
     borderRadius: "50%",
-    border: "2px solid var(--primary)",
-    background: "linear-gradient(135deg, var(--primary), var(--primary-dark))",
-    color: "var(--text)",
+    border: "2px solid #7a00ff",
+    background: "linear-gradient(135deg, #7a00ff, #5500b8)",
+    color: "#ffffff",
     fontSize: "24px",
     fontWeight: "bold",
     cursor: "pointer",
@@ -273,9 +234,8 @@ function crearBotonVolverArriba() {
 
   document.body.appendChild(boton);
 
-  // Mostrar/ocultar según scroll
   window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 400) {
+    if (window.pageYOffset > 500) {
       boton.style.opacity = "1";
       boton.style.visibility = "visible";
       boton.style.transform = "scale(1)";
@@ -286,7 +246,6 @@ function crearBotonVolverArriba() {
     }
   });
 
-  // Efectos hover
   boton.addEventListener("mouseenter", () => {
     boton.style.transform = "scale(1.15) translateY(-3px)";
     boton.style.boxShadow = "0 12px 35px rgba(122, 0, 255, 0.6)";
@@ -297,7 +256,6 @@ function crearBotonVolverArriba() {
     boton.style.boxShadow = "0 8px 25px rgba(122, 0, 255, 0.4)";
   });
 
-  // Scroll suave al hacer click
   boton.addEventListener("click", () => {
     window.scrollTo({
       top: 0,
@@ -312,23 +270,63 @@ function crearBotonVolverArriba() {
 }
 
 // ============================================
-// 8. INICIALIZACIÓN
+// 8. PERFORMANCE: REDUCIR ANIMACIONES SI ES NECESARIO
 // ============================================
 
-function inicializar() {
-  // Esperar a que el DOM esté completamente cargado
-  document.addEventListener("DOMContentLoaded", () => {
-    configurarMenuResponsive();
-    configurarEfectosCartas();
-    configurarAnimacionScroll();
-    configurarPulsoBoton();
-    configurarAnimacionHeader();
-    configurarAnimacionCarga();
-    crearBotonVolverArriba();
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
 
-    console.log('✅ KJCODE - Página "Servicios" cargada correctamente');
-  });
+if (prefersReducedMotion.matches) {
+  document.body.classList.add("reduced-motion");
 }
 
-// Ejecutar inicialización
-inicializar();
+// ============================================
+// 9. OPTIMIZACIÓN: THROTTLE PARA RESIZE
+// ============================================
+
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (window.innerWidth > 768) {
+      enlacesNavegacion.classList.remove("activo");
+      botonMenu.classList.remove("activo");
+      document.body.style.overflow = "";
+    }
+  }, 250);
+});
+
+// ============================================
+// 10. INICIALIZACIÓN AL CARGAR LA PÁGINA
+// ============================================
+
+window.addEventListener("load", () => {
+  inicializarAnimaciones();
+
+  setTimeout(() => {
+    agregarEfectoParallax();
+  }, 500);
+
+  crearBotonScrollTop();
+
+  const heroContenido = document.querySelector(".heroContenido");
+  if (heroContenido) {
+    heroContenido.style.opacity = "1";
+    heroContenido.style.transform = "translateY(0)";
+  }
+
+  console.log("✅ KJCODE - Página Servicios cargada correctamente");
+});
+
+// ============================================
+// 11. PREVENIR FLASH DE CONTENIDO NO ESTILIZADO
+// ============================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("loaded");
+});
+
+// ============================================
+// FIN DEL SCRIPT
+// ============================================
