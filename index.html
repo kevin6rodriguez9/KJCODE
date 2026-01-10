@@ -3,191 +3,176 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KJCODE - INICIO</title>
-    <link rel="stylesheet" href="KJCODE.css"/>
+    <title>KJCODE - Transformamos Ideas en Código</title>
+    <link rel="stylesheet" href="index.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <header>
-      <div class="logo">
-        <img src="KJCODELOGO.webp" alt="Logo KJCODE" />
-      </div>
+    <div class="fondoAnimado"></div>
+    <div class="logo">
+      <img src="KJCODELOGO.webp" alt="KJCODE Logo" />
+    </div>
+    <div class="fondoDegradado"></div>
 
-      <!-- Menú hamburguesa -->
-      <div id="menuHamburguesa">☰</div>
-
-      <!-- Barra deslizante -->
-      <div id="sidebar">
-        <div id="close-btn">✖</div>
-        <ul>
-          <li><a href="index.html" class="activo">INICIO</a></li>
-          <li><a href="nosotros.html">NOSOTROS</a></li>
-          <li><a href="servicios.html">SERVICIOS</a></li>
-          <li><a href="contacto.html">CONTACTO</a></li>
-        </ul>
-      </div>
-
-      <!-- Navegación normal (para desktop) -->
+    <header id="cabecera">
       <nav>
-        <ul>
+        <div class="logo">
+          <img src="KJCODELOGO.webp" alt="KJCODE Logo" />
+        </div>
+        <ul class="enlacesNavegacion" id="enlacesNavegacion">
           <li><a href="index.html" class="activo">INICIO</a></li>
           <li><a href="nosotros.html">NOSOTROS</a></li>
           <li><a href="servicios.html">SERVICIOS</a></li>
           <li><a href="contacto.html">CONTACTO</a></li>
         </ul>
+        <div class="botonMenu" id="botonMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </nav>
     </header>
 
-    <section id="eslogan">
-      <h1>Innovación y Tecnología en Cada Línea de Código</h1>
-      <p>
-        En KJCODE transformamos tus ideas en software moderno, seguro y
-        escalable. Creamos experiencias digitales que impulsan el futuro de tu
-        negocio.
-      </p>
-      <button onclick="location.href='contacto.html'">Contáctanos</button>
+    <section class="encabezadoPrincipal">
+      <div class="contenidoEncabezado">
+        <h1>Transformamos Ideas en Código</h1>
+        <p class="eslogan">
+          Innovación y tecnología de vanguardia para impulsar tu negocio al
+          futuro digital
+        </p>
+        <div class="botonesPrincipal">
+          <a href="servicios.html" class="boton botonPrincipal"
+            >Ver Servicios</a
+          >
+          <a href="contacto.html" class="boton botonSecundario">Contáctanos</a>
+        </div>
+      </div>
     </section>
 
-    <section id="bienvenida">
-      <h2>Bienvenido a KJCODE</h2>
-      <p>
-        Somos una empresa de desarrollo de software enfocada en brindar
-        soluciones tecnológicas personalizadas. Nos apasiona la innovación y
-        trabajamos para que cada proyecto sea único, eficiente y de alto
-        impacto.
-      </p>
-    </section>
-
-    <section id="porqueElegirnos">
-      <h2>¿Por qué elegirnos?</h2>
-      <div class="servicios">
-        <div class="item">
-          <h3>🚀 Innovación</h3>
+    <section class="serviciosDestacados" id="servicios">
+      <h2 class="tituloSeccion">¿Por Qué Elegirnos?</h2>
+      <div class="serviciosGrilla">
+        <div class="servicioCarta">
+          <span class="servicioIcono">🚀</span>
+          <h3>Innovación</h3>
           <p>
-            Siempre aplicamos las últimas tendencias y tecnologías para ofrecer
-            soluciones modernas.
+            Utilizamos las últimas tecnologías y metodologías para crear
+            soluciones que marcan la diferencia
           </p>
         </div>
-        <div class="item">
-          <h3>🔒 Seguridad</h3>
+        <div class="servicioCarta">
+          <span class="servicioIcono">🔒</span>
+          <h3>Seguridad</h3>
           <p>
-            Construimos software confiable y seguro, protegiendo la información
-            de tu negocio.
+            Protegemos tu información con los más altos estándares de seguridad
+            y cifrado
           </p>
         </div>
-        <div class="item">
-          <h3>⚡ Eficiencia</h3>
+        <div class="servicioCarta">
+          <span class="servicioIcono">⚡</span>
+          <h3>Eficiencia</h3>
           <p>
-            Optimizamos procesos para que tu empresa gane tiempo, recursos y
-            productividad.
+            Optimizamos cada línea de código para máxima velocidad y rendimiento
           </p>
         </div>
-        <div class="item">
-          <h3>🌍 Escalabilidad</h3>
+        <div class="servicioCarta">
+          <span class="servicioIcono">🌍</span>
+          <h3>Escalabilidad</h3>
           <p>
-            Desarrollamos sistemas que crecen contigo, adaptados a las
-            necesidades del mañana.
+            Desarrollamos sistemas que crecen junto con tu negocio sin límites
           </p>
         </div>
       </div>
     </section>
 
-    <section id="proyectos">
-      <h2>Proyectos Destacados</h2>
-      <div class="grid">
-        <div class="card">
+    <section class="proyectos">
+      <h2 class="tituloSeccion">Proyectos Destacados</h2>
+      <div class="proyectosGrilla">
+        <div class="proyectoCarta">
           <h3>Sistema de Inventario</h3>
           <p>
-            Plataforma web para una empresa metalmecánica, con control de
-            inventario en tiempo real.
+            Plataforma web completa con control de inventario en tiempo real
+            para empresa metalmecánica
           </p>
         </div>
-        <div class="card">
+        <div class="proyectoCarta">
           <h3>Baloncesto & Deportes</h3>
           <p>
-            Páginas dedicadas a la información y actualidad del baloncesto,
-            Fórmula 1, motociclismo y fútbol internacional (FC Barcelona y Real
-            Madrid).
+            Portal de noticias deportivas con cobertura de baloncesto, Fórmula
+            1, motociclismo y fútbol
           </p>
         </div>
-        <div class="card">
+        <div class="proyectoCarta">
           <h3>Cultura & Entretenimiento</h3>
           <p>
-            Proyectos de información sobre Dragon Ball, noticias de videojuegos
-            y tendencias actuales.
+            Plataformas de información sobre Dragon Ball, videojuegos y
+            tendencias actuales
           </p>
         </div>
-        <div class="card">
+        <div class="proyectoCarta">
           <h3>Mokepon</h3>
           <p>
-            Videojuego interactivo desarrollado en la web con personajes y
-            batallas en tiempo real.
+            Videojuego web interactivo con personajes únicos y batallas en
+            tiempo real
           </p>
         </div>
       </div>
-      <button class="botonProyectos" onclick="location.href='servicios.html'">
-        Conoce más de Nuestros Servicios
-      </button>
     </section>
 
-    <section id="contactar">
-      <h2>¿Listo para dar el siguiente paso?</h2>
+    <section class="seccionAccion">
+      <h2>¿Listo para Innovar?</h2>
       <p>
-        Hablemos sobre tu proyecto y hagamos realidad tu idea con soluciones
-        tecnológicas a la medida.
+        Trabajemos juntos para convertir tu visión en realidad con tecnología de
+        última generación
       </p>
-      <button onclick="location.href='contacto.html'">Empezar Ahora</button>
+      <a href="contacto.html" class="boton botonPrincipal">Comenzar Ahora</a>
     </section>
 
     <footer>
-      <div class="pieDePagina">
-        <div class="pieDePagina-seccion">
-          <img src="LOGO ANGOSTO.webp" alt="KJCODE Logo" class="footer-logo" />
+      <div class="contenidoPie">
+        <div class="seccionPie">
+          <h3>KJCODE</h3>
           <p><strong>Colombia</strong></p>
-          <p><strong>Cel:</strong> +57 318 879 9710</p>
-          <p><strong>Cel:</strong> +57 300 315 6797</p>
           <p>Bogotá, Colombia</p>
+          <p>Tel: +57 318 879 9710</p>
+          <p>Tel: +57 300 315 6797</p>
+          <p>kjcode6@gmail.com</p>
         </div>
-
-        <div class="pieDePagina-seccion">
+        <div class="seccionPie">
           <h3>Servicios</h3>
-          <ul>
-            <li><a href="servicios.html">Desarrollo Web</a></li>
-            <li><a href="servicios.html">Aplicaciones a la Medida</a></li>
-            <li><a href="servicios.html">Inventario</a></li>
-            <li><a href="servicios.html">Agendamiento de Citas</a></li>
-            <li><a href="servicios.html">Mantenimiento Web</a></li>
-          </ul>
+          <a href="servicios.html">Desarrollo Web</a>
+          <a href="servicios.html">Aplicaciones a Medida</a>
+          <a href="servicios.html">Sistemas Empresariales</a>
+          <a href="servicios.html">Mantenimiento Web</a>
         </div>
-
-        <div class="pieDePagina-seccion">
+        <div class="seccionPie">
+          <h3>Empresa</h3>
+          <a href="nosotros.html">Sobre Nosotros</a>
+          <a href="nosotros.html">Misión y Visión</a>
+          <a href="nosotros.html">Nuestro Equipo</a>
+          <a href="contacto.html">Contacto</a>
+        </div>
+        <div class="seccionPie">
           <h3>Síguenos</h3>
-          <div class="redes">
-            <a href="https://www.instagram.com/kjco.de" target="_blank"
-              ><img src="INSTAGRAM.webp" alt="Instagram"
-            /></a>
-            <a href="https://www.tiktok.com/@kjco.de" target="_blank"
-              ><img src="TIK TOK.webp" alt="TikTok"
-            /></a>
+          <div class="redesSociales">
+            <a href="https://www.instagram.com/kjco.de" target="_blank">📷</a>
             <a
               href="https://www.facebook.com/profile.php?id=61580866250656"
               target="_blank"
-              ><img src="FACEBOOK.webp" alt="Facebook"
-            /></a>
+              >📘</a
+            >
+            <a href="https://www.tiktok.com/@kjco.de" target="_blank">🎵</a>
           </div>
         </div>
       </div>
-
-      <div class="pieDePagina-abajo">
-        <p>
-          &copy; 2025 KJCODE - Todos los derechos reservados | Proyecto en
-          GitHub
-        </p>
-        <ul>
-          <li><a href="contacto.html">Contacto</a></li>
-        </ul>
+      <div class="botonPie">
+        <p>&copy; 2025 KJCODE - Todos los derechos reservados</p>
       </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

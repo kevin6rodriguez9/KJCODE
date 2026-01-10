@@ -1,404 +1,172 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KJCODE - Servicios</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #0d0d0d;
-        color: #eaeaea;
-        line-height: 1.6;
-      }
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 40px;
-        background: black;
-        border-bottom: 2px solid #6c63ff;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-      }
-      header .logo img {
-        width: 150px;
-      }
-      header nav ul {
-        list-style: none;
-        display: flex;
-        gap: 25px;
-      }
-      header nav a {
-        color: #eaeaea;
-        text-decoration: none;
-        font-weight: bold;
-        padding: 8px 14px;
-        border-radius: 6px;
-        transition: background 0.3s;
-      }
-      header nav a:hover,
-      header nav a.activo {
-        background: #6c63ff;
-        color: #fff;
-      }
-      #menuHamburguesa {
-        display: none;
-        font-size: 30px;
-        cursor: pointer;
-        color: #fff;
-        z-index: 1001;
-      }
-      #sidebar {
-        position: fixed;
-        top: 0;
-        right: -260px;
-        width: 260px;
-        height: 100%;
-        background: #111;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        transition: right 0.3s ease;
-        z-index: 1000;
-      }
-      #sidebar.active {
-        right: 0;
-      }
-      #close-btn {
-        font-size: 28px;
-        color: #fff;
-        cursor: pointer;
-        align-self: flex-end;
-        margin-bottom: 30px;
-        display: none;
-      }
-      #sidebar ul {
-        list-style: none;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-      #sidebar ul li a {
-        text-decoration: none;
-        color: #eaeaea;
-        font-size: 18px;
-        font-weight: bold;
-        transition: color 0.3s;
-      }
-      #sidebar ul li a:hover,
-      #sidebar ul li a.activo {
-        color: #6c63ff;
-      }
-      main {
-        padding: 60px 40px;
-        max-width: 1200px;
-        margin: auto;
-      }
-      section {
-        margin-bottom: 60px;
-        background: #1a1a1a;
-        padding: 40px;
-        border-radius: 14px;
-        box-shadow: 0 4px 16px rgba(106, 13, 173, 0.25);
-        transition: transform 0.2s;
-      }
-      section:hover {
-        transform: translateY(-4px);
-      }
-      section h2 {
-        font-size: 2rem;
-        margin-bottom: 20px;
-        color: #6c63ff;
-        border-left: 5px solid #6c63ff;
-        padding-left: 15px;
-        text-shadow: 0 0 10px rgba(106, 13, 173, 0.6);
-      }
-      section p {
-        font-size: 1.1rem;
-        margin-bottom: 15px;
-        line-height: 1.7;
-      }
-      .lista-servicios {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 30px;
-        margin-top: 30px;
-      }
-      .servicio {
-        background: #111;
-        padding: 25px;
-        border-radius: 12px;
-        text-align: center;
-        border: 1px solid #333;
-        transition: transform 0.3s, background 0.3s;
-        cursor: pointer;
-      }
-      .servicio h3 {
-        color: #6c63ff;
-        font-size: 1.4rem;
-        margin-bottom: 12px;
-      }
-      .servicio p {
-        font-size: 1rem;
-        color: #ccc;
-      }
-      footer {
-        background: black;
-        color: #ddd;
-        padding: 50px 40px 20px;
-        border-top: 2px solid #6c63ff;
-      }
-      .pieDePagina {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 40px;
-        margin-bottom: 30px;
-      }
-      .pieDePagina-seccion h3 {
-        color: #6c63ff;
-        margin-bottom: 15px;
-        font-size: 1.2rem;
-      }
-      .pieDePagina-seccion ul {
-        list-style: none;
-        padding: 0;
-      }
-      .pieDePagina-seccion ul li {
-        margin-bottom: 10px;
-      }
-      .pieDePagina-seccion ul li a {
-        text-decoration: none;
-        color: #bbb;
-        transition: color 0.3s;
-      }
-      .pieDePagina-seccion ul li a:hover {
-        color: #6c63ff;
-      }
-      .footer-logo {
-        width: 140px;
-        margin-bottom: 15px;
-      }
-      .redes a img {
-        width: 35px;
-        margin: 0 8px;
-        border-radius: 50%;
-        transition: transform 0.3s;
-      }
-      .redes a img:hover {
-        transform: scale(1.1);
-      }
-      .pieDePagina-abajo {
-        border-top: 1px solid #333;
-        padding-top: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.9rem;
-        text-align: center;
-      }
-      .pieDePagina-abajo ul {
-        display: flex;
-        list-style: none;
-        gap: 20px;
-        padding: 0;
-      }
-      .pieDePagina-abajo ul li a {
-        text-decoration: none;
-        color: #aaa;
-        transition: color 0.3s;
-      }
-      .pieDePagina-abajo ul li a:hover {
-        color: #6c63ff;
-      }
-      @media (max-width: 677px) {
-        #menuHamburguesa {
-          display: block;
-          position: absolute;
-          top: 50%;
-          right: 20px;
-          transform: translateY(-50%);
-        }
-        header nav {
-          display: none;
-        }
-      }
-      @media (min-width: 678px) {
-        #sidebar {
-          display: none;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <div class="logo"><img src="KJCODELOGO.webp" alt="Logo KJCODE" /></div>
-      <div id="menuHamburguesa">☰</div>
-      <div id="sidebar">
-        <div id="close-btn">✖</div>
-        <ul>
-          <li><a href="index.html">INICIO</a></li>
-          <li><a href="nosotros.html">NOSOTROS</a></li>
-          <li><a href="servicios.html" class="activo">SERVICIOS</a></li>
-          <li><a href="contacto.html">CONTACTO</a></li>
-        </ul>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KJCODE - Servicios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="servicios.css">
+</head>
+
+<body>
+  <div class="fondoAnimado"></div>
+  <header>
+    <nav>
+      <div class="logo">
+      <img src="KJCODELOGO.webp" alt="KJCODE Logo" />
+    </div>
+      <ul class="enlacesNavegacion" id="enlacesNavegacion">
+        <li><a href="index.html">INICIO</a></li>
+        <li><a href="nosotros.html">NOSOTROS</a></li>
+        <li><a href="servicios.html" class="activo">SERVICIOS</a></li>
+        <li><a href="contacto.html">CONTACTO</a></li>
+      </ul>
+      <div class="botonMenu" id="botonMenu">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-      <nav>
-        <ul>
-          <li><a href="index.html">INICIO</a></li>
-          <li><a href="nosotros.html">NOSOTROS</a></li>
-          <li><a href="servicios.html" class="activo">SERVICIOS</a></li>
-          <li><a href="contacto.html">CONTACTO</a></li>
-        </ul>
-      </nav>
-    </header>
+    </nav>
+  </header>
 
-    <main>
-      <section id="servicios">
-        <h2>Servicios 💻</h2>
-        <p>
-          En <strong>KJCODE</strong> ofrecemos soluciones digitales modernas
-          para tu empresa o proyecto, siempre con tecnología confiable y a la
-          medida.
-        </p>
-        <div class="lista-servicios">
-          <div class="servicio">
-            <h3>Desarrollo Web</h3>
-            <p>
-              Diseño y programación de páginas web modernas, seguras y adaptadas
-              a cualquier dispositivo.
-            </p>
-          </div>
-          <div class="servicio">
-            <h3>Aplicaciones</h3>
-            <p>
-              Creación de aplicaciones personalizadas que ayudan a mejorar
-              procesos y conectar con tus clientes.
-            </p>
-          </div>
-          <div class="servicio">
-            <h3>Mantenimiento de Páginas</h3>
-            <p>
-              Actualizamos y cuidamos tu página para que siempre esté en línea,
-              rápida y al día.
-            </p>
-          </div>
-          <div class="servicio">
-            <h3>Mejoramiento de Páginas</h3>
-            <p>
-              Renovamos páginas existentes con mejor diseño, velocidad y nuevas
-              funciones que marcan la diferencia.
-            </p>
-          </div>
-          <div class="servicio">
-            <h3>Sistemas Específicos</h3>
-            <p>
-              Desde inventarios hasta agendamiento de citas, desarrollamos
-              sistemas a la medida de tu empresa.
-            </p>
-          </div>
-          <div class="servicio">
-            <h3>Diseño de Interfaces Modernas</h3>
-            <p>
-              Creación de diseños atractivos y fáciles de usar, para brindar la
-              mejor experiencia digital.
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
+  <section class="encabezadoPagina">
+    <h1>Nuestros Servicios</h1>
+    <p>Soluciones digitales completas y personalizadas para llevar tu negocio al siguiente nivel con tecnología de
+      vanguardia</p>
+  </section>
 
-    <footer>
-      <div class="pieDePagina">
-        <div class="pieDePagina-seccion">
-          <img src="LOGO ANGOSTO.webp" alt="KJCODE Logo" class="footer-logo" />
-          <p><strong>Colombia</strong></p>
-          <p><strong>Cel:</strong> +57 318 879 9710</p>
-          <p><strong>Cel:</strong> +57 300 315 6797</p>
-          <p>Bogotá, Colombia</p>
-        </div>
-        <div class="pieDePagina-seccion">
-          <h3>Servicios</h3>
+  <section class="seccionServicios">
+    <div class="serviciosGrilla">
+      <div class="servicioCarta">
+        <span class="iconoServicio">🌐</span>
+        <h3>Desarrollo Web</h3>
+        <p>Creamos sitios web modernos, rápidos y completamente adaptables a cualquier dispositivo.</p>
+        <div class="service-features">
           <ul>
-            <li><a href="servicios.html">Desarrollo Web</a></li>
-            <li><a href="servicios.html">Aplicaciones a la Medida</a></li>
-            <li><a href="servicios.html">Inventario</a></li>
-            <li><a href="servicios.html">Agendamiento de Citas</a></li>
-            <li><a href="servicios.html">Mantenimiento Web</a></li>
+            <li>Diseño responsive y moderno</li>
+            <li>Optimización SEO</li>
+            <li>Alto rendimiento</li>
+            <li>Seguridad garantizada</li>
           </ul>
         </div>
-        <div class="pieDePagina-seccion">
-          <h3>Síguenos</h3>
-          <div class="redes">
-            <a href="https://www.instagram.com/kjco.de" target="_blank"
-              ><img src="INSTAGRAM.webp" alt="Instagram"
-            /></a>
-            <a href="https://www.tiktok.com/@kjco.de" target="_blank"
-              ><img src="TIK TOK.webp" alt="TikTok"
-            /></a>
-            <a
-              href="https://www.facebook.com/profile.php?id=61580866250656"
-              target="_blank"
-              ><img src="FACEBOOK.webp" alt="Facebook"
-            /></a>
-          </div>
+      </div>
+
+      <div class="servicioCarta">
+        <span class="iconoServicio">📱</span>
+        <h3>Aplicaciones a Medida</h3>
+        <p>Desarrollamos aplicaciones personalizadas que automatizan procesos y mejoran la productividad.</p>
+        <div class="servicioCaracteristicas">
+          <ul>
+            <li>Análisis de necesidades</li>
+            <li>Desarrollo personalizado</li>
+            <li>Integración con sistemas</li>
+            <li>Soporte continuo</li>
+          </ul>
         </div>
       </div>
-      <div class="pieDePagina-abajo">
-        <p>
-          &copy; <span id="year"></span> KJCODE - Todos los derechos reservados
-        </p>
-        <ul>
-          <li><a href="contacto.html">Contacto</a></li>
-        </ul>
+
+      <div class="servicioCarta">
+        <span class="iconoServicio">⚙️</span>
+        <h3>Sistemas Empresariales</h3>
+        <p>Soluciones completas para gestión de inventarios, citas, ventas y mucho más.</p>
+        <div class="servicioCaracteristicas">
+          <ul>
+            <li>Sistema de inventarios</li>
+            <li>Agendamiento de citas</li>
+            <li>Gestión de clientes (CRM)</li>
+            <li>Reportes en tiempo real</li>
+          </ul>
+        </div>
       </div>
-    </footer>
 
-    <script>
-      const menuHamburguesa = document.getElementById("menuHamburguesa");
-      const sidebar = document.getElementById("sidebar");
-      const closeBtn = document.getElementById("close-btn");
+      <div class="servicioCarta">
+        <span class="iconoServicio">🔧</span>
+        <h3>Mantenimiento Web</h3>
+        <p>Mantenemos tu sitio actualizado, seguro y funcionando a máxima velocidad en todo momento.</p>
+        <div class="servicioCaracteristicas">
+          <ul>
+            <li>Actualizaciones regulares</li>
+            <li>Monitoreo 24/7</li>
+            <li>Backups automáticos</li>
+            <li>Corrección de errores</li>
+          </ul>
+        </div>
+      </div>
 
-      menuHamburguesa.onclick = () => {
-        sidebar.classList.add("active");
-        closeBtn.style.display = "block";
-        menuHamburguesa.style.display = "none";
-        document.body.style.overflow = "hidden";
-      };
+      <div class="servicioCarta">
+        <span class="iconoServicio">✨</span>
+        <h3>Mejoramiento Web</h3>
+        <p>Renovamos y modernizamos sitios existentes con nuevo diseño, velocidad y funcionalidades.</p>
+        <div class="servicioCaracteristicas">
+          <ul>
+            <li>Rediseño moderno</li>
+            <li>Optimización de velocidad</li>
+            <li>Nuevas funcionalidades</li>
+            <li>Mejora de experiencia</li>
+          </ul>
+        </div>
+      </div>
 
-      closeBtn.onclick = () => {
-        sidebar.classList.remove("active");
-        closeBtn.style.display = "none";
-        menuHamburguesa.style.display = "block";
-        document.body.style.overflow = "";
-      };
+      <div class="servicioCarta">
+        <span class="iconoServicio">🎨</span>
+        <h3>Diseño UI/UX</h3>
+        <p>Creamos interfaces atractivas e intuitivas que brindan la mejor experiencia a tus usuarios.</p>
+        <div class="servicioCaracteristicas">
+          <ul>
+            <li>Diseño centrado en el usuario</li>
+            <li>Prototipos interactivos</li>
+            <li>Identidad visual coherente</li>
+            <li>Accesibilidad garantizada</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      sidebar.querySelectorAll("ul li a").forEach((link) =>
-        link.addEventListener("click", () => {
-          sidebar.classList.remove("active");
-          closeBtn.style.display = "none";
-          menuHamburguesa.style.display = "block";
-          document.body.style.overflow = "";
-        })
-      );
+  <section class="seccionAccion">
+    <h2>¿Listo para Transformar tu Negocio?</h2>
+    <p>Contáctanos hoy y descubre cómo nuestras soluciones pueden llevar tu proyecto al siguiente nivel</p>
+    <a href="contacto.html" class="botonPrimario">Comenzar Proyecto</a>
+  </section>
 
-      window.addEventListener("resize", () => {
-        if (window.innerWidth > 677) {
-          sidebar.classList.remove("active");
-          closeBtn.style.display = "none";
-          menuHamburguesa.style.display = "block";
-          document.body.style.overflow = "";
-        }
-      });
+  <footer>
+    <div class="contenidoPie">
+      <div class="seccionPie">
+        <h3>KJCODE</h3>
+        <p><strong>Colombia</strong></p>
+        <p>Bogotá, Colombia</p>
+        <p>Tel: +57 318 879 9710</p>
+        <p>Tel: +57 300 315 6797</p>
+        <p>kjcode6@gmail.com</p>
+      </div>
+      <div class="seccionPie">
+        <h3>Servicios</h3>
+        <a href="servicios.html">Desarrollo Web</a>
+        <a href="servicios.html">Aplicaciones a Medida</a>
+        <a href="servicios.html">Sistemas Empresariales</a>
+        <a href="servicios.html">Mantenimiento Web</a>
+      </div>
+      <div class="seccionPie">
+        <h3>Empresa</h3>
+        <a href="nosotros.html">Sobre Nosotros</a>
+        <a href="nosotros.html">Misión y Visión</a>
+        <a href="nosotros.html">Nuestro Equipo</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+      <div class="seccionPie">
+        <h3>Síguenos</h3>
+        <div class="redesSociales">
+          <a href="https://www.instagram.com/kjco.de" target="_blank">📷</a>
+          <a href="https://www.facebook.com/profile.php?id=61580866250656" target="_blank">📘</a>
+          <a href="https://www.tiktok.com/@kjco.de" target="_blank">🎵</a>
+        </div>
+    </div>
+    <div class="botonPie">
+      <p>&copy; 2025 KJCODE - Todos los derechos reservados</p>
+    </div>
+  </footer>
+  <script src="servicios.js"></script>
+</body>
 
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
-  </body>
 </html>
